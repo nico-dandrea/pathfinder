@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  node:
+    build:
+      context: .
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
+    ports:
+      - "${NODE_LISTENING_PORT:-3000}:${NODE_CONTAINER_PORT:-3000}"
+    volumes:
+      - .:/app
+    environment:
+      - MONGODB_URI=${MONGODB_URI:-mongodb://localhost/mern-demo}
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER:-root}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD:-changeme}
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "${MONGODB_LISTENING_PORT:-27017}:${MONGODB_CONTAINER_PORT:-27017}"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+
+volumes:
+  mongodb-data:
