@@ -1,6 +1,8 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
+import { express } from 'express'
+import { connect } from 'mongoose'
+import cors from 'cors'
+
+const spellCardRoutes = require('./router/spellCard')
 
 const app = express()
 
@@ -9,7 +11,7 @@ app.use(cors())
 app.use(express.json())
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_CONNECT_URL, {
+connect(process.env.MONGODB_CONNECT_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -17,9 +19,7 @@ mongoose.connect(process.env.MONGODB_CONNECT_URL, {
   .catch((err) => console.error(err))
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
+app.use('/spellCards', spellCardRoutes)
 
 // Start the server
 const port = process.env.PORT || 5000
