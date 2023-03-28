@@ -1,37 +1,55 @@
-version: "3.8"
-
+version: '3.8'
 services:
-  node:
+  # client:
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "${CLIENT_LISTENING_PORT}:${CLIENT_CONTAINER_PORT}"
+  #   environment:
+  #     - SERVER_API_URL=${SERVER_API_URL}
+  #   depends_on:
+  #     - server
+  #   volumes:
+  #     - ./client:/usr/src/app
+  server:
     build:
-      context: .
-      args:
-        NODE_ENV: ${NODE_ENV:-development}
+      context: ./server
+      dockerfile: Dockerfile
     ports:
-      - "${NODE_LISTENING_PORT:-3000}:${NODE_CONTAINER_PORT:-3000}"
-    volumes:
-      - .:/app
+      - "${NODE_LISTENING_PORT}:${NODE_CONTAINER_PORT}"
+      - "${MONGODB_LISTENING_PORT}:${MONGODB_CONTAINER_PORT}"
     environment:
-      - MONGODB_URI=${MONGODB_URI:-mongodb://localhost/mern-demo}
+      - NODE_ENV=${NODE_ENV}
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
+      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
     depends_on:
-      - mongodb
-    networks:
-      - app-network
-
-  mongodb:
-    image: mongo:latest
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER:-root}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD:-changeme}
+      - mongo
     volumes:
-      - mongodb-data:/data/db
-    ports:
-      - "${MONGODB_LISTENING_PORT:-27017}:${MONGODB_CONTAINER_PORT:-27017}"
+      - ./server:/usr/src/app
     networks:
-      - app-network
+      - mern
+  mongo:
+    image: mongo
+    ports:
+      - "${MONGODB_LISTENING_PORT}:${MONGODB_CONTAINER_PORT}"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.stats()" ]
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - mern
 
 networks:
-  app-network:
+  mern:
 
 
 volumes:
-  mongodb-data:
+  mongodbdata:
