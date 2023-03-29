@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
+const mongoose = require('mongoose')
 
-const spellCardSchema = new Schema({
+const spellCardSchema = new mongoose.Schema({
   name: { type: String, required: true },
   castingComponents: { type: Array, required: true },
   actions: { type: Number, required: true },
@@ -11,6 +11,6 @@ const spellCardSchema = new Schema({
   description: { type: String, required: true }
 })
 
-const SpellCard = model('SpellCard', spellCardSchema)
+const SpellCard = mongoose.model('SpellCard', spellCardSchema)
 
 module.exports = SpellCard

@@ -18,38 +18,22 @@ services:
       dockerfile: Dockerfile
     ports:
       - "${NODE_LISTENING_PORT}:${NODE_CONTAINER_PORT}"
-      - "${MONGODB_LISTENING_PORT}:${MONGODB_CONTAINER_PORT}"
     environment:
-      - NODE_ENV=${NODE_ENV}
-      - MONGODB_URI=${MONGODB_URI}
-      - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
-      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+      CONN_STRING: "mongodb://${MONGODB_ROOT_USER}:${MONGODB_ROOT_PASSWORD}@mongodb"
     depends_on:
-      - mongo
+      - mongodb
     volumes:
       - ./server:/usr/src/app
-    networks:
-      - mern
-  mongo:
+  mongodb:
     image: mongo
     ports:
       - "${MONGODB_LISTENING_PORT}:${MONGODB_CONTAINER_PORT}"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
     healthcheck:
       test: [ "CMD", "mongo", "--eval", "db.stats()" ]
       timeout: 5s
       retries: 5
     volumes:
-      - mongodbdata:/data/db
-    networks:
-      - mern
-
-networks:
-  mern:
-
-
-volumes:
-  mongodbdata:
+      - ~/mongodb:/data/db

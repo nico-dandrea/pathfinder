@@ -1,7 +1,7 @@
 FROM node:alpine
-WORKDIR /app
+WORKDIR /
 COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE ${NODE_CONTAINER_PORT}
-CMD ["npm", "start"]
+ENTRYPOINT [ "node" ,"server.js"]

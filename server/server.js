@@ -1,8 +1,7 @@
-import { express } from 'express'
-import { connect } from 'mongoose'
-import cors from 'cors'
-
-const spellCardRoutes = require('./router/spellCard')
+const cors = require('cors')
+const express = require('express')
+const spellCardRoutes = require('./routes/spellCard')
+const db = require('./utils/db')
 
 const app = express()
 
@@ -11,12 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 // Connect to MongoDB
-connect(process.env.MONGODB_CONNECT_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error(err))
+db.connect()
 
 // Routes
 app.use('/spellCards', spellCardRoutes)

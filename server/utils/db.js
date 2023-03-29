@@ -1,16 +1,16 @@
 const mongoose = require('mongoose')
-const { MONGODB_URI } = process.env
+const { CONN_STRING } = process.env
 
 module.exports = {
   // eslint-disable-next-line space-before-function-paren
-  async connectDB() {
-    await mongoose.connect(MONGODB_URI, {
+  async connect() {
+    await mongoose.connect(CONN_STRING, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
       useCreateIndex: true
     })
       .then((response) => console.log('MongoDB Connected'))
-      .catch((error) => console.log(error.message))
+      .catch((error) => console.log(`An error ocurred while trying to connect to mongoDB: ${error.message}`))
   }
 }

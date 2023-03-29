@@ -4,10 +4,8 @@
 	"private": true,
 	"dependencies": {
 	  "express": "^4.17.1",
-	  "mongoose": "^5.12.2"
-	},
-	"scripts": {
-	  "start": "NODE_ENV=${NODE_ENV} NODE_PORT=${NODE_LISTENING_PORT} node index.js"
+	  "mongoose": "^5.12.2",
+	  "cors": "^2.8.5"
 	}
-  }
+}
   

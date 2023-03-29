@@ -12,5 +12,8 @@
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2"
+  },
+  "scripts": {
+    "mongo-connect": "docker exec -it pathfinder-mongo-1 bash"
   }
 }

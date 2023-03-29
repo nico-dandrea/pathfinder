@@ -1,5 +1,5 @@
 /* eslint-disable space-before-function-paren */
-import SpellCard from '../models/spellCard'
+const SpellCard = require('../models/spellCard')
 
 module.exports = {
   // Retrieves a collection of all spell cards
@@ -31,7 +31,7 @@ module.exports = {
       .catch((err) => next(err))
   },
 
-  async delete(req, res, next) {
+  async destroy(req, res, next) {
     await SpellCard.findByIdAndDelete(req.params.id)
       .then((spellCard) => res.status(204).end())
       .catch((err) => next(err))
