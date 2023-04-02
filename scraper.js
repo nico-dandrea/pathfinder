@@ -20,18 +20,29 @@ async function scrapeSpell(spell_id) {
         }
     })
     const source = $('a.external-link i').text().trim()
-    const traditions = [];
-    $('b:contains("Traditions")').nextAll('u').find('a').each((i, el) => {
-        const traditionText = $(el).text().trim();
+    const traditions = []
+    $('b:contains("Traditions")').nextUntil('b:contains("Bloodline")').find('a').each((i, el) => {
+        const traditionText = $(el).text().trim()
         if (traditionText) {
-            traditions.push(traditionText);
+            traditions.push(traditionText)
         }
-    });
+    })
+    const bloodline = $('b:contains("Bloodline")').next('u').text().trim()
+
+    const castingTimes=[]
+    $('span.action').each((i,el)=>{
+        const castingTimeText = $(el).attr('title').trim()
+        if (castingTimeText) {
+            castingTimes.push(castingTimeText)
+        }
+    })
     console.log(`Spell Name: ${spellName}`)
     console.log(`Spell Level: ${spellLevel}`)
     console.log(`Traits: ${traits.join(', ')}`)
     console.log(`Source: ${source}`)
-    console.log(`Traditions: ${traditions.join(', ')}`);
+    console.log(`Traditions: ${traditions.join(', ')}`)
+    console.log(`Bloodline: ${bloodline}`)
+    console.log(`Casting Time: ${castingTimes}`)
 }
 
 spell_ids.forEach(scrapeSpell)
