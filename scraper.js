@@ -42,7 +42,7 @@ async function scrapeSpell(spell_id) {
     console.log(`Source: ${source}`)
     console.log(`Traditions: ${traditions.join(', ')}`)
     console.log(`Bloodline: ${bloodline}`)
-    console.log(`Casting Time: ${castingTimes}`)
+    console.log(`Casting Time: ${castingTimes.join(' to ')}`)
 }
 
 spell_ids.forEach(scrapeSpell)
